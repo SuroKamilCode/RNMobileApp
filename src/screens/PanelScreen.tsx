@@ -1,7 +1,10 @@
+import { signOut } from 'firebase/auth';
 import * as React from 'react';
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { Button, Divider } from 'react-native-paper';
 import memesApi from '../api/memesApi';
 import ResultsList from '../components/ResultsList';
+import { auth } from '../firebase/firebase-config';
 
 interface Props {
     navigation: void | any
@@ -9,6 +12,16 @@ interface Props {
 
 const PanelScreen: React.FC<Props> = ({ navigation }: Props) => {
     const [results, setResults] = React.useState([]);
+
+    const handleSignOut = () => {
+        signOut(auth).then(() => {
+            console.log(auth)
+            navigation.navigate('Login');
+        }).catch((error) => {
+            console.log(error);
+        });
+
+    }
 
     React.useEffect(() => {
         const api = async () => {
@@ -21,9 +34,26 @@ const PanelScreen: React.FC<Props> = ({ navigation }: Props) => {
 
     return (
         <SafeAreaView>
+            <Button style={styles.buttonStyle}
+                color={'purple'}
+                labelStyle={{ color: '#ecf0f1' }}
+                mode={'contained'}
+                loading={false}
+                onPress={() => handleSignOut()}>
+                Wyloguj
+            </Button>
+            <Divider />
             <ResultsList navigation={navigation} results={results} />
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
+
+const styles = StyleSheet.create({
+    buttonStyle: {
+        width: 200,
+        alignSelf: 'center',
+        marginVertical: 10
+    }
+})
 
 export default PanelScreen

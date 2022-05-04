@@ -2,9 +2,12 @@ import { signOut } from 'firebase/auth';
 import * as React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { Button, Divider } from 'react-native-paper';
+import { useDispatch } from 'react-redux';
 import memesApi from '../api/memesApi';
 import ResultsList from '../components/ResultsList';
 import { auth } from '../firebase/firebase-config';
+import allActions from '../redux/actions/index';
+import { useAppSelector } from '../redux/hooks';
 
 interface Props {
     navigation: void | any
@@ -13,14 +16,18 @@ interface Props {
 const PanelScreen: React.FC<Props> = ({ navigation }: Props) => {
     const [results, setResults] = React.useState([]);
 
+    const dispatch = useDispatch();
+    const users = useAppSelector(state => state.currentUser);
+    console.log(users.isLoggedIn);
+
     const handleSignOut = () => {
         signOut(auth).then(() => {
             console.log(auth)
+            dispatch(allActions.logOut());
             navigation.navigate('Login');
         }).catch((error) => {
             console.log(error);
         });
-
     }
 
     React.useEffect(() => {

@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
@@ -11,39 +11,47 @@ interface Props {
     navigation: void | any
 }
 
-const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
+const RegisterScreen: React.FC<Props> = ({ navigation }: Props) => {
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
-    const [logErr, setLogErr] = React.useState<string | null>(null);
-    const [isLogErr, setIsLogErr] = React.useState<boolean>(false);
+    const [passwordRepeat, setPasswordRepeat] = React.useState<string>('');
+    const [regErr, setRegErr] = React.useState<string | null>(null);
+    const [isRegErr, setIsRegErr] = React.useState<boolean>(false);
+    const [loading, setLoading] = React.useState<boolean>(false);
 
     const dispatch = useDispatch();
-    const users = useAppSelector(state => state.currentUser);
     const errors = useAppSelector(state => state.errorReducer);
-    console.log(users.isLoggedIn);
 
     React.useEffect(() => {
         if (email.length > 0 || password.length > 0) {
-            setIsLogErr(false)
-            setLogErr(null)
+            setIsRegErr(false)
+            setRegErr(null)
         }
     }, [email || password])
 
-    const signIn = () => {
-        signInWithEmailAndPassword(auth, email, password)
-            .then((userCredential) => {
-                const user = userCredential.user.uid
-                dispatch(allActions.setUser(user, true))
-                navigation.navigate('Panel')
-                setEmail('')
-                setPassword('')
-            })
-            .catch((err) => {
-                dispatch(allActions.logInError(err.code));
-                setIsLogErr(true)
-                setLogErr(err.code)
-            })
+
+    const createAcc = () => {
+        if (password === passwordRepeat) {
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user.uid
+                    navigation.navigate('Login')
+                    setEmail('')
+                    setPassword('')
+                    setPasswordRepeat('')
+                    setLoading(true)
+                })
+                .catch((err) => {
+                    dispatch(allActions.logInError(err.code));
+                    setIsRegErr(true)
+                    setRegErr(err.code)
+                })
+        } else if (password !== passwordRepeat) {
+            setIsRegErr(true)
+            setRegErr('Hasła nie są identyczne!')
+        }
     }
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -75,24 +83,29 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                                 }
                             }}
                         />
+                        <TextInput
+                            label="Powtórz hasło"
+                            value={passwordRepeat}
+                            onChangeText={passwordRepeat => setPasswordRepeat(passwordRepeat)}
+                            autoCorrect={false}
+                            secureTextEntry
+                            style={styles.inputStyle}
+                            theme={{
+                                colors: {
+                                    placeholder: 'purple', primary: 'purple', background: 'white'
+                                }
+                            }}
+                        />
                         <Button style={styles.buttonStyle}
                             color={'#ecf0f1'}
                             labelStyle={{ color: 'purple' }}
                             mode={'contained'}
-                            loading={users.isLoggedIn}
-                            onPress={() => signIn()}>
-                            Zaloguj
-                        </Button>
-                        <Button style={styles.registerButtonStyle}
-                            color={'#ecf0f1'}
-                            labelStyle={{ color: 'purple' }}
-                            mode={'contained'}
-                            loading={users.isLoggedIn}
-                            onPress={() => navigation.navigate('Register')}>
-                            Załóż konto
+                            loading={loading}
+                            onPress={() => createAcc()}>
+                            Zarejestruj
                         </Button>
                     </Card>
-                    {isLogErr ? <Text style={styles.errorStyle}>{logErr}</Text> : null}
+                    {isRegErr ? <Text style={styles.errorStyle}>{regErr}</Text> : null}
                 </ScrollView>
             </View>
         </SafeAreaView>
@@ -132,15 +145,10 @@ const styles = StyleSheet.create({
         margin: 15,
         alignSelf: 'center'
     },
-    registerButtonStyle: {
-        width: 200,
-        marginBottom: 15,
-        alignSelf: 'center'
-    },
     errorStyle: {
         color: 'red',
         alignSelf: 'center'
     }
 });
 
-export default LoginScreen;
+export default RegisterScreen;

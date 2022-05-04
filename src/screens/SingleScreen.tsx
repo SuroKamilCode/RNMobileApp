@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Title } from 'react-native-paper';
+import { Button, Title } from 'react-native-paper';
 
 interface Props {
-    route: string | any
+    route: string | any,
+    navigation: any
 }
 
-const SingleScreen = ({ route }: Props) => {
+const SingleScreen = ({ route, navigation }: Props) => {
 
     const { name, photo } = route.params;
 
@@ -20,6 +21,14 @@ const SingleScreen = ({ route }: Props) => {
                         uri: `${photo}`
                     }} />
             </View>
+            <Button style={styles.buttonStyle}
+                color={'purple'}
+                labelStyle={{ color: '#ecf0f1' }}
+                mode={'contained'}
+                loading={false}
+                onPress={() => navigation.navigate('Panel')}>
+                Cofnij
+            </Button>
         </SafeAreaView >
     )
 }
@@ -44,6 +53,11 @@ const styles = StyleSheet.create({
     viewstyle: {
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    buttonStyle: {
+        width: 200,
+        alignSelf: 'center',
+        marginVertical: 10
     }
 })
 

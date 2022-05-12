@@ -14,6 +14,7 @@ import React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 import { createStore } from 'redux';
+import { strings } from './src/localization/localization';
 import rootReducer from './src/redux/reducers';
 import LoginScreen from './src/screens/LoginScreen';
 import PanelScreen from './src/screens/PanelScreen';
@@ -30,14 +31,14 @@ const App: React.FC = () => {
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTintColor: '#ecf0f1', headerStyle: { backgroundColor: 'purple' } }} initialRouteName="Login">
             <Stack.Screen options={{
-              title: 'Logowanie',
+              title: strings.loginPage,
             }} component={LoginScreen} name="Login" />
             <Stack.Screen options={{
-              title: 'Rejestracja',
+              title: strings.registerPage,
               headerBackVisible: false,
             }} component={RegisterScreen} name="Register" />
             <Stack.Screen options={{
-              title: 'Panel użytkownika',
+              title: strings.panelPage,
               headerBackVisible: false,
             }} component={PanelScreen} name="Panel" />
             <Stack.Screen options={{

@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import memesApi from '../api/memesApi';
 import ResultsList from '../components/ResultsList';
 import { auth } from '../firebase/firebase-config';
+import { strings } from '../localization/localization';
 import allActions from '../redux/actions/index';
 import { useAppSelector } from '../redux/hooks';
 
@@ -47,7 +48,7 @@ const PanelScreen: React.FC<Props> = ({ navigation }: Props) => {
                 mode={'contained'}
                 loading={false}
                 onPress={() => handleSignOut()}>
-                Wyloguj
+                {strings.logout}
             </Button>
             <Divider />
             <ResultsList navigation={navigation} results={results} />

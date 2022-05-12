@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { auth } from '../firebase/firebase-config';
+import { strings } from '../localization/localization';
 import allActions from '../redux/actions/index';
 import { useAppSelector } from '../redux/hooks';
 
@@ -63,7 +64,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                         />
                         <TextInput
-                            label="Hasło"
+                            label={strings.pass}
                             value={password}
                             onChangeText={password => setPassword(password)}
                             autoCorrect={false}
@@ -81,7 +82,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                             mode={'contained'}
                             loading={users.isLoggedIn}
                             onPress={() => signIn()}>
-                            Zaloguj
+                            {strings.login}
                         </Button>
                         <Button style={styles.registerButtonStyle}
                             color={'#ecf0f1'}
@@ -89,7 +90,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                             mode={'contained'}
                             loading={users.isLoggedIn}
                             onPress={() => navigation.navigate('Register')}>
-                            Załóż konto
+                            {strings.register}
                         </Button>
                     </Card>
                     {isLogErr ? <Text style={styles.errorStyle}>{logErr}</Text> : null}

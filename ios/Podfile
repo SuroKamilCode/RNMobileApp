@@ -19,6 +19,7 @@ target 'internMobileAppTS' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
+
   target 'internMobileAppTSTests' do
     inherit! :complete
     # Pods for testing

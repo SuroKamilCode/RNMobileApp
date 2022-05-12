@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Button, Title } from 'react-native-paper';
+import { strings } from '../localization/localization';
 
 interface Props {
     route: string | any,
@@ -27,7 +28,7 @@ const SingleScreen = ({ route, navigation }: Props) => {
                 mode={'contained'}
                 loading={false}
                 onPress={() => navigation.navigate('Panel')}>
-                Cofnij
+                {strings.backButton}
             </Button>
         </SafeAreaView >
     )

@@ -4,6 +4,7 @@ import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
 import { auth } from '../firebase/firebase-config';
+import { strings } from '../localization/localization';
 import allActions from '../redux/actions/index';
 import { useAppSelector } from '../redux/hooks';
 
@@ -48,7 +49,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }: Props) => {
                 })
         } else if (password !== passwordRepeat) {
             setIsRegErr(true)
-            setRegErr('Hasła nie są identyczne!')
+            setRegErr(strings.failedRegisterMessage)
         }
     }
 
@@ -71,7 +72,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                         />
                         <TextInput
-                            label="Hasło"
+                            label={strings.pass}
                             value={password}
                             onChangeText={password => setPassword(password)}
                             autoCorrect={false}
@@ -84,7 +85,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }: Props) => {
                             }}
                         />
                         <TextInput
-                            label="Powtórz hasło"
+                            label={strings.passRepeat}
                             value={passwordRepeat}
                             onChangeText={passwordRepeat => setPasswordRepeat(passwordRepeat)}
                             autoCorrect={false}
@@ -102,7 +103,7 @@ const RegisterScreen: React.FC<Props> = ({ navigation }: Props) => {
                             mode={'contained'}
                             loading={loading}
                             onPress={() => createAcc()}>
-                            Zarejestruj
+                            {strings.register}
                         </Button>
                     </Card>
                     {isRegErr ? <Text style={styles.errorStyle}>{regErr}</Text> : null}

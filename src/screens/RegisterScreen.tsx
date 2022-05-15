@@ -46,6 +46,19 @@ const RegisterScreen: React.FC<Props> = ({ navigation }: Props) => {
                     dispatch(allActions.logInError(err.code));
                     setIsRegErr(true)
                     setRegErr(err.code)
+                    if (err.code === 'auth/invalid-email') {
+                        setIsRegErr(true)
+                        setRegErr(strings.wrongEmail)
+                    } else if (err.code === 'auth/internal-error') {
+                        setIsRegErr(true)
+                        setRegErr(strings.registerError)
+                    } else if (err.code === 'auth/email-already-in-use') {
+                        setIsRegErr(true)
+                        setRegErr(strings.emailInUse)
+                    } else {
+                        setIsRegErr(true)
+                        setRegErr(strings.unknownRegisterError)
+                    }
                 })
         } else if (password !== passwordRepeat) {
             setIsRegErr(true)
@@ -148,7 +161,8 @@ const styles = StyleSheet.create({
     },
     errorStyle: {
         color: 'red',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginBottom: 10
     }
 });
 

@@ -11,7 +11,14 @@ export let strings = new LocalizedStrings({
         register: 'Załóż konto',
         failedRegisterMessage: 'Hasła nie są identyczne',
         logout: 'Wyloguj',
-        backButton: 'Cofnij'
+        backButton: 'Cofnij',
+        wrongPassword: 'Nieprawidłowe hasło',
+        wrongEmail: 'Niepoprawny email',
+        loginError: 'Błąd logowania, spróbuj ponownie',
+        unknownError: 'Nieznany błąd, spróbuj ponownie',
+        registerError: 'Błąd rejestracji, spróbuj ponownie',
+        emailInUse: 'Istnieje konto o podanym adresie Email',
+        unknownRegisterError: 'Nieznany błąd rejestracji, spróbuj ponownie'
     },
     en: {
         loginPage: "Login",
@@ -23,6 +30,13 @@ export let strings = new LocalizedStrings({
         register: 'Register',
         failedRegisterMessage: 'Passwords are not equal',
         logout: 'Logout',
-        backButton: 'Back'
+        backButton: 'Back',
+        wrongPassword: 'Wrong password',
+        wrongEmail: 'Wrong email',
+        loginError: 'Login error, please try again',
+        unknownError: 'Unknown error, please try again',
+        registerError: 'Register error, please try again',
+        emailInUse: 'Email already in use',
+        unknownRegisterError: 'Unknow register error, please try again'
     },
 });

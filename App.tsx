@@ -10,7 +10,7 @@
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React from 'react';
+import * as React from 'react';
 import { Provider as PaperProvider } from 'react-native-paper';
 import { Provider as ReduxProvider } from 'react-redux';
 import { createStore } from 'redux';
@@ -24,15 +24,22 @@ import SingleScreen from './src/screens/SingleScreen';
 const store = createStore(rootReducer);
 const Stack = createNativeStackNavigator();
 
-const App: React.FC = () => {
+const App = () => {
+
+  const [lang, setLang] = React.useState<string | any>('');
+
+  if (lang === '') {
+    strings.setLanguage('pl');
+  }
+
   return (
     <PaperProvider>
       <ReduxProvider store={store}>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerTitleAlign: 'center', headerTintColor: '#ecf0f1', headerStyle: { backgroundColor: 'purple' } }} initialRouteName="Login">
-            <Stack.Screen options={{
-              title: strings.loginPage,
-            }} component={LoginScreen} name="Login" />
+            <Stack.Screen name="Login" options={{ title: strings.loginPage }}>
+              {(props) => <LoginScreen setLang={setLang} {...props} />}
+            </Stack.Screen>
             <Stack.Screen options={{
               title: strings.registerPage,
               headerBackVisible: false,

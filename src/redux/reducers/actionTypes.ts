@@ -13,7 +13,12 @@ interface logOutAction {
 
 interface logInError {
     type: "LOG_IN_ERROR"
-    payload: {}
+    payload: any
 }
 
-export type Action = setUserAction | logOutAction | logInError
+interface setLangAction {
+    type: "LANG",
+    payload: string
+}
+
+export type Action = setUserAction | logOutAction | logInError | setLangAction

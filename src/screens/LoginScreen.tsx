@@ -3,25 +3,27 @@ import * as React from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { Button, Card, TextInput, Title } from 'react-native-paper';
 import { useDispatch } from 'react-redux';
+import ToggleSwitch from '../components/ToggleSwitch';
 import { auth } from '../firebase/firebase-config';
 import { strings } from '../localization/localization';
 import allActions from '../redux/actions/index';
 import { useAppSelector } from '../redux/hooks';
 
 interface Props {
-    navigation: void | any
+    navigation: void | any,
+    setLang: string | any
 }
 
-const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
+const LoginScreen: React.FC<Props> = ({ navigation, setLang }: Props) => {
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = React.useState<string>('');
     const [logErr, setLogErr] = React.useState<string | null>(null);
-    const [isLogErr, setIsLogErr] = React.useState<boolean>(false);
+    const [isLogErr, setIsLogErr] = React.useState<boolean | void>(false);
 
     const dispatch = useDispatch();
     const users = useAppSelector(state => state.currentUser);
     const errors = useAppSelector(state => state.errorReducer);
-    console.log(users.isLoggedIn);
+    const language = useAppSelector(state => state.langReducer);
 
     React.useEffect(() => {
         if (email.length > 0 || password.length > 0) {
@@ -38,11 +40,24 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                 navigation.navigate('Panel')
                 setEmail('')
                 setPassword('')
+                setIsLogErr(false)
+                setLogErr(null)
             })
             .catch((err) => {
                 dispatch(allActions.logInError(err.code));
-                setIsLogErr(true)
-                setLogErr(err.code)
+                if (err.code === 'auth/wrong-password') {
+                    setIsLogErr(true)
+                    setLogErr(strings.wrongPassword)
+                } else if (err.code === 'auth/invalid-email') {
+                    setIsLogErr(true)
+                    setLogErr(strings.wrongEmail)
+                } else if (err.code === 'auth/internal-error') {
+                    setIsLogErr(true)
+                    setLogErr(strings.loginError)
+                } else {
+                    setIsLogErr(true)
+                    setLogErr(strings.unknownError)
+                }
             })
     }
 
@@ -89,11 +104,16 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
                             labelStyle={{ color: 'purple' }}
                             mode={'contained'}
                             loading={users.isLoggedIn}
-                            onPress={() => navigation.navigate('Register')}>
+                            onPress={() => {
+                                navigation.navigate('Register')
+                                setIsLogErr(false)
+                                setLogErr(null)
+                            }}>
                             {strings.register}
                         </Button>
                     </Card>
                     {isLogErr ? <Text style={styles.errorStyle}>{logErr}</Text> : null}
+                    <ToggleSwitch setLang={setLang} setLogErr={setLogErr} setIsLogErr={setIsLogErr} />
                 </ScrollView>
             </View>
         </SafeAreaView>

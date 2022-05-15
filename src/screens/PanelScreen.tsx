@@ -19,6 +19,7 @@ const PanelScreen: React.FC<Props> = ({ navigation }: Props) => {
 
     const dispatch = useDispatch();
     const users = useAppSelector(state => state.currentUser);
+    const language = useAppSelector(state => state.langReducer);
     console.log(users.isLoggedIn);
 
     const handleSignOut = () => {

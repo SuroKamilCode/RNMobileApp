@@ -42,7 +42,7 @@ const App = () => {
             </Stack.Screen>
             <Stack.Screen options={{
               title: strings.registerPage,
-              headerBackVisible: false,
+              headerBackVisible: true,
             }} component={RegisterScreen} name="Register" />
             <Stack.Screen options={{
               title: strings.panelPage,
